@@ -8,6 +8,7 @@ public class HexGrid : MonoBehaviour
     public int gridWidth = 6;
     public Text cellLabel;
     Canvas gridCanvas;
+    private const float DEFAULT_CELL_UNITS_SIZE = 10f;
 
     HexCell[] activeHexCells;
 
@@ -17,10 +18,10 @@ public class HexGrid : MonoBehaviour
 
         activeHexCells = new HexCell[gridHeight * gridWidth];
 
-        createCells();
+        createCellsForGrid();
     }
 
-    private void createCells(){
+    private void createCellsForGrid(){
         int cellID = 0;
         
         for (int zPosition = 0; zPosition < gridHeight; zPosition++){
@@ -31,23 +32,40 @@ public class HexGrid : MonoBehaviour
     
     }
 
-    private void createCell(int xPosition, int zPosition, int cellID){
-        Vector3 cellPosition;
-        
-        cellPosition.x = xPosition * 10f;
-        cellPosition.y = 0f;
-        cellPosition.z = zPosition * 10f;
+    private void createCell(int xPosition, int zPosition, int currentCellID){
+        Vector3 currentCellPosition = assignCellPosition(xPosition, zPosition);
 
+        HexCell targetCell = assignHexCell(currentCellID, currentCellPosition);
+        
+        Text label = assignHexLabel(currentCellPosition, xPosition, zPosition);  
+    }
+
+    private Vector3 assignCellPosition(int xPosition, int zPosition){
+        Vector3 cellPosition;
+
+        cellPosition.x = xPosition * DEFAULT_CELL_UNITS_SIZE;
+        cellPosition.y = 0f;
+        cellPosition.z = zPosition * DEFAULT_CELL_UNITS_SIZE;
+        
+        return cellPosition;
+    }
+
+    private HexCell assignHexCell(int cellID, Vector3 targetCellPosition){
         HexCell targetCell = activeHexCells[cellID] = Instantiate<HexCell>(hexCellPrefab);
         targetCell.transform.SetParent(transform, false);
-        targetCell.transform.localPosition = cellPosition;
-
-        Text label = Instantiate<Text>(cellLabel);
-        label.rectTransform.SetParent(gridCanvas.transform, false);
-        label.rectTransform.anchoredPosition = new Vector2(cellPosition.x, cellPosition.z);
-        label.text = xPosition.ToString() + "\n" + zPosition.ToString();
+        targetCell.transform.localPosition = targetCellPosition;
         
+        return targetCell;
+    }
 
+    private Text assignHexLabel(Vector3 targetCellPosition, int xPosition, int zPosition){
+        Text currentLabel = Instantiate<Text>(cellLabel);
+        currentLabel.rectTransform.SetParent(gridCanvas.transform, false);
+
+        currentLabel.rectTransform.anchoredPosition = new Vector2(targetCellPosition.x, targetCellPosition.z);
+        currentLabel.text = xPosition.ToString() + "\n" + zPosition.ToString();
+        
+        return currentLabel;
     }
 
 }
