@@ -8,7 +8,8 @@ public class HexGrid : MonoBehaviour
     public int gridWidth = 6;
     public Text cellLabel;
     Canvas gridCanvas;
-    private const float DEFAULT_CELL_UNITS_SIZE = 10f;
+    private const float DEFAULT_CELL_X_POSITION_DISTANCE = TunableHexagonParameters.INNER_RADIUS * 2f;
+    private const float DEFAULT_CELL_Z_POSITION_DISTANCE = TunableHexagonParameters.OUTER_RADIUS * 1.5f;
 
     HexCell[] activeHexCells;
 
@@ -43,9 +44,9 @@ public class HexGrid : MonoBehaviour
     private Vector3 assignCellPosition(int xPosition, int zPosition){
         Vector3 cellPosition;
 
-        cellPosition.x = xPosition * DEFAULT_CELL_UNITS_SIZE;
+        cellPosition.x = xPosition * DEFAULT_CELL_X_POSITION_DISTANCE;
         cellPosition.y = 0f;
-        cellPosition.z = zPosition * DEFAULT_CELL_UNITS_SIZE;
+        cellPosition.z = zPosition * DEFAULT_CELL_Z_POSITION_DISTANCE;
         
         return cellPosition;
     }
