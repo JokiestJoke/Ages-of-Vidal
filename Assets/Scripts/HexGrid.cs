@@ -10,7 +10,8 @@ public class HexGrid : MonoBehaviour
     Canvas gridCanvas;
     private const float DEFAULT_CELL_X_POSITION_DISTANCE = TunableHexagonParameters.INNER_RADIUS * 2f;
     private const float DEFAULT_CELL_Z_POSITION_DISTANCE = TunableHexagonParameters.OUTER_RADIUS * 1.5f;
-
+    private const float DEFAULT_SPACING_MODIFIER = 0.5f;
+    
     HexCell[] activeHexCells;
 
     void Awake()
@@ -30,7 +31,6 @@ public class HexGrid : MonoBehaviour
                 createCell(xPosition, zPosition, cellID++);
             }
         }
-    
     }
 
     private void createCell(int xPosition, int zPosition, int currentCellID){
@@ -43,8 +43,8 @@ public class HexGrid : MonoBehaviour
 
     private Vector3 assignCellPosition(int xPosition, int zPosition){
         Vector3 cellPosition;
-
-        cellPosition.x = xPosition * DEFAULT_CELL_X_POSITION_DISTANCE;
+        
+        cellPosition.x = (xPosition + zPosition * DEFAULT_SPACING_MODIFIER - zPosition / 2) * DEFAULT_CELL_X_POSITION_DISTANCE;
         cellPosition.y = 0f;
         cellPosition.z = zPosition * DEFAULT_CELL_Z_POSITION_DISTANCE;
         
