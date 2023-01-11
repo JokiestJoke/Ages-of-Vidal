@@ -8,19 +8,25 @@ public class HexGrid : MonoBehaviour
     public int gridWidth = 6;
     public Text cellLabel;
     Canvas gridCanvas;
+    HexCell[] activeHexCells;
+    HexMesh hexMesh;
     private const float DEFAULT_CELL_X_POSITION_DISTANCE = TunableHexagonParameters.INNER_RADIUS * 2f;
     private const float DEFAULT_CELL_Z_POSITION_DISTANCE = TunableHexagonParameters.OUTER_RADIUS * 1.5f;
     private const float DEFAULT_SPACING_MODIFIER = 0.5f;
-    
-    HexCell[] activeHexCells;
-
+   
     void Awake()
     {
         gridCanvas = GetComponentInChildren<Canvas>();
 
+        hexMesh = GetComponentInChildren<HexMesh>();
+
         activeHexCells = new HexCell[gridHeight * gridWidth];
 
         createCellsForGrid();
+    }
+
+    void Start(){
+        hexMesh.trigulateCells(activeHexCells);
     }
 
     private void createCellsForGrid(){
